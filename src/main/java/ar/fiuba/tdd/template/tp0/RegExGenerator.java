@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-//import java.util.regex.Pattern;
-//import java.util.regex.PatternSyntaxException;
 
 public class RegExGenerator {
 
@@ -64,18 +62,19 @@ public class RegExGenerator {
         indexRE = 0;
         while (indexRE <= regEx.length() - 1) {
             switch (regEx.charAt(indexRE)) {
-                case '.':
-                    lstChars.add(Character.toString(regEx.charAt(indexRE)));
-                    break;
                 case '\\':
                     indexRE++;
-                    lstChars.add("\\" + Character.toString(regEx.charAt(indexRE)));
+                    if (regEx.charAt(indexRE) == '.') {
+                        lstChars.add("\\" + Character.toString(regEx.charAt(indexRE)));
+                    } else {
+                        lstChars.add(Character.toString(regEx.charAt(indexRE)));
+                    }
                     break;
                 case '[':
                     indexRE++;
                     lstChars.add(getSet(regEx));
                     break;
-                default: // es un literal, un caracter especifico
+                default: // es un literal, un caracter
                     lstChars.add(Character.toString(regEx.charAt(indexRE)));
                     break;
             }
@@ -157,23 +156,6 @@ public class RegExGenerator {
             retS = retS.concat(ascii);
         } else {
             retS = getMaxStingCharacter(possibleChar, maxRepeat);
-/*
-            while (indRep <= maxRepeat) {
-                if (possibleChar.compareTo(".") == 0) { // es cualquier caracter ascii
-                    asciiValue = numRan.nextInt(255) + 1;
-                    ascii = String.valueOf(Character.toChars(asciiValue));
-                } else {
-                    if (possibleChar.length() == 1) { // es un literal
-                        ascii = possibleChar;
-                    } else { // es un conjunto de caracteres
-                        positionChar = numRan.nextInt(possibleChar.length());
-                        ascii = Character.toString(possibleChar.charAt(positionChar));
-                    }
-                }
-                retS = retS.concat(ascii);
-                indRep++;
-            }
-*/
         }
         return  retS;
     }
@@ -188,16 +170,6 @@ public class RegExGenerator {
     }
 
     public List<String> generate(String regEx, int numberOfResults) {
-/*
-        try {
-            Pattern pattern = Pattern.compile("^" + regEx + "$");
-            //System.out.println("Pattern created: "+pattern.pattern());
-        } catch (PatternSyntaxException errorExpression) {
-            System.out.println("This string could not compile: " + errorExpression.getPattern());
-            System.out.println(errorExpression.getMessage());
-            //System.exit(0);
-        }
-*/
         return new ArrayList<String>() {
             {
                 processParser(regEx);
